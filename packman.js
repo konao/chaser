@@ -15,7 +15,7 @@ const UTL = require('./utils');
 // （ぴったり整数値の座標でしか曲がれないのでは操作しにくいため）
 const PosAdjustMargin = 0.4;
 
-// ドット食は判定マージン
+// ドット食い判定マージン
 const EatDotMargin = 0.2;
 
 const MAX_ANIM_COUNT = 6;
@@ -315,7 +315,7 @@ class Packman extends Entity {
 
         if ((Math.abs(x-cx) < EatDotMargin) &&
             (Math.abs(y-cy) < EatDotMargin)) {
-                // 各セルの基準点に十ち近い距離に入った．
+                // 各セルの基準点に十分近い距離に入った．
                 // (cx, cy)にドットがあれば、ドットを食べたこととする．
                 let value = stage.get(cx, cy);
                 if (value === ST.DOT) {
