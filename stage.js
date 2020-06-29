@@ -9,6 +9,7 @@ const POWER_FOOD = 3;
 class Stage {
     constructor() {
         this._stage = null; // this._stage[y][x]の順で格納されている
+        this._sprs = null;  // this._sprs[y][x]の順で格納されている
         this._w = 0;
         this._h = 0;
     }
@@ -34,6 +35,24 @@ class Stage {
         return this._stage[y][x];
     }
 
+    getSpr(x, y) {
+        if ((x<0) || (x>=this._w) ||
+            (y<0) || (y>=this._h)) {
+                return null;
+        }
+
+        return this._sprs[y][x];
+    }
+
+    setSpr(x, y, spr) {
+        if ((x<0) || (x>=this._w) ||
+            (y<0) || (y>=this._h)) {
+                return;
+        }
+
+        this._sprs[y][x] = spr;
+    }
+
     // @param edgeLen [i] 1つの正方形ブロックの辺の長さ
     // @param wc [i] 幅方向カウント（正方形ブロックの個数）
     // @param hc [i] 高さ方向カウント（正方形ブロックの個数）
@@ -49,6 +68,10 @@ class Stage {
         this._stage = new Array(h).fill(null);
         for (let i=0; i<h; i++) {
             this._stage[i] = new Array(w).fill(SPACE);
+        }
+        this._sprs = new Array(h).fill(null);
+        for (let i=0; i<h; i++) {
+            this._sprs[i] = new Array(w).fill(null);
         }
 
         // 内側基本ブロック

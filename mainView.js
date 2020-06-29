@@ -53,6 +53,7 @@ loader.load((loader, resources) => {
                     break;
                 case DOT:
                     spr = new PIXI.Sprite(PIXI.Texture.from('dot'));
+                    stage.setSpr(x, y, spr);    // ドットスプライトを登録
                     break;
             }
 
@@ -65,7 +66,6 @@ loader.load((loader, resources) => {
         }
     }
 
-
     // packmanスプライト生成
     console.log(resources);
     packman.genSprite(PIXI, container, resources);
@@ -76,6 +76,7 @@ loader.load((loader, resources) => {
     app.ticker.add((delta) => {
         if (packman) {
             packman.move();
+            packman.detectCollision(stage);
         }
     });
 });
