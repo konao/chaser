@@ -1,18 +1,21 @@
 const PIXI = require('pixi.js');
 const $ = require('jquery');
 const { Stage, SPACE, WALL, DOT, POWER_FOOD } = require('./stage');
-const Utils = require('./utils');
+const { Game } = require('./game');
 const { Entity } = require('./entity');
-const { Packman } = require('./packman');
+const { Pacman } = require('./pacman');
+const Utils = require('./utils');
 const C = require('./const');
+
+let game = new Game();
 
 let stage = new Stage();
 stage.generate(4, 8, 6);
 stage.print();
 
-let packman = new Packman();
-packman.setPos({x: 1.0, y: 1.0});
-packman.setStage(stage);
+let pacman = new Pacman();
+pacman.setPos({x: 1.0, y: 1.0});
+pacman.setStage(stage);
 
 //Create a Pixi Application
 let app = new PIXI.Application({ 
@@ -31,8 +34,7 @@ app.stage.interactive = true;
 // document.body.appendChild(app.view);
 
 const loader = PIXI.Loader.shared;
-loader
-    .add('images/characters.json')
+loader.add('images/characters.json');
 loader.load((loader, resources) => {
     const N=0;
     const w = window.innerWidth;
@@ -41,42 +43,18 @@ loader.load((loader, resources) => {
     let container = new PIXI.Container();
 
     // stageに対応するスプライト生成
-    // resources.tile.texture.frame = new PIXI.Rectangle(24*1, 24*3, 24, 24);
-    let stageSize = stage.getSize();
-    for (let y=0; y<stageSize.h; y++) {
-        for (let x=0; x<stageSize.w; x++) {
-            let e = stage.get(x, y);
-            let spr = null;
-            switch (e) {
-                case WALL:
-                    spr = new PIXI.Sprite(PIXI.Texture.from('wall'));
-                    break;
-                case DOT:
-                    spr = new PIXI.Sprite(PIXI.Texture.from('dot'));
-                    stage.setSpr(x, y, spr);    // ドットスプライトを登録
-                    break;
-            }
+    stage.genSprite(PIXI, container, resources);
 
-            if (spr) {
-                spr.x = x*26;
-                spr.y = y*26;
-    
-                container.addChild(spr);
-            }
-        }
-    }
-
-    // packmanスプライト生成
-    console.log(resources);
-    packman.genSprite(PIXI, container, resources);
+    // pacmanスプライト生成
+    pacman.genSprite(PIXI, container, resources);
 
     app.stage.addChild(container);
 
     // app.ticker.speed = 0.2;  // 効かなかった
     app.ticker.add((delta) => {
-        if (packman) {
-            packman.move();
-            packman.detectCollision(stage);
+        if (pacman) {
+            pacman.move();
+            pacman.detectCollision(stage);
         }
     });
 });
@@ -96,34 +74,30 @@ $(window).keydown(e => {
     switch (e.which) {
         case 37:    // left
         {
-            packman.setDirec(C.LEFT);
+            pacman.setDirec(C.LEFT);
             break;
         }
         case 38:    // up
         {
-            packman.setDirec(C.UP);
+            pacman.setDirec(C.UP);
             break;
         }
         case 39:    // right
         {
-            packman.setDirec(C.RIGHT);
+            pacman.setDirec(C.RIGHT);
             break;
         }
         case 40:    // down
         {
-            packman.setDirec(C.DOWN);
+            pacman.setDirec(C.DOWN);
             break;
         }
         case 32:    // space
         {
-            packman.setDirec(C.NODIR);
+            pacman.setDirec(C.NODIR);
             break;
         }
     }
-});
-
-$(window).mousedown(e => {
-    console.log(`mousedown (${e.clientX}, ${e.clientY})`);
 });
 
 $('#btStart').click(function() {

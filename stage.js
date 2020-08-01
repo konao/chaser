@@ -156,6 +156,33 @@ class Stage {
             console.log(s);
         }
     }
+
+    // stageに対応するスプライト生成
+    genSprite(PIXI, container, resources) {
+        let stageSize = this.getSize();
+        for (let y=0; y<stageSize.h; y++) {
+            for (let x=0; x<stageSize.w; x++) {
+                let e = this.get(x, y);
+                let spr = null;
+                switch (e) {
+                    case WALL:
+                        spr = new PIXI.Sprite(PIXI.Texture.from('wall'));
+                        break;
+                    case DOT:
+                        spr = new PIXI.Sprite(PIXI.Texture.from('dot'));
+                        this.setSpr(x, y, spr);    // ドットスプライトを登録
+                        break;
+                }
+    
+                if (spr) {
+                    spr.x = x*26;
+                    spr.y = y*26;
+        
+                    container.addChild(spr);
+                }
+            }
+        }
+    }
 }
 
 module.exports = {

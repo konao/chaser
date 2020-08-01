@@ -1,4 +1,4 @@
-
+// キャラクターベースクラス
 class Entity {
     constructor() {
         this._x = 0.0;
