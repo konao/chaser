@@ -1,21 +1,8 @@
 const PIXI = require('pixi.js');
 const $ = require('jquery');
-const { Stage, SPACE, WALL, DOT, POWER_FOOD } = require('./stage');
 const { Game } = require('./game');
-const { Entity } = require('./entity');
-const { Pacman } = require('./pacman');
-const Utils = require('./utils');
-const C = require('./const');
 
 let game = new Game();
-
-let stage = new Stage();
-stage.generate(4, 8, 6);
-stage.print();
-
-let pacman = new Pacman();
-pacman.setPos({x: 1.0, y: 1.0});
-pacman.setStage(stage);
 
 //Create a Pixi Application
 let app = new PIXI.Application({ 
@@ -40,21 +27,16 @@ loader.load((loader, resources) => {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
+    game.initStage();
+
     let container = new PIXI.Container();
-
-    // stageに対応するスプライト生成
-    stage.genSprite(PIXI, container, resources);
-
-    // pacmanスプライト生成
-    pacman.genSprite(PIXI, container, resources);
-
+    game.genSprites(PIXI, container, resources);
     app.stage.addChild(container);
 
     // app.ticker.speed = 0.2;  // 効かなかった
     app.ticker.add((delta) => {
-        if (pacman) {
-            pacman.move();
-            pacman.detectCollision(stage);
+        if (game) {
+            game.update();
         }
     });
 });
@@ -74,27 +56,27 @@ $(window).keydown(e => {
     switch (e.which) {
         case 37:    // left
         {
-            pacman.setDirec(C.LEFT);
+            game.onLeftPressed();
             break;
         }
         case 38:    // up
         {
-            pacman.setDirec(C.UP);
+            game.onUpPressed();
             break;
         }
         case 39:    // right
         {
-            pacman.setDirec(C.RIGHT);
+            game.onRightPressed();
             break;
         }
         case 40:    // down
         {
-            pacman.setDirec(C.DOWN);
+            game.onDownPressed();
             break;
         }
         case 32:    // space
         {
-            pacman.setDirec(C.NODIR);
+            game.onSpacePressed();
             break;
         }
     }
