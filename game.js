@@ -34,6 +34,9 @@ class Game {
         this._pacman = new Pacman();
         this._pacman.setPos({x: 1.0, y: 1.0});
         this._pacman.setStage(this._stage);
+
+        // debug
+        this._stage.searchAllWayPoints();
     }
 
     // @param PIXI [i] PIXIオブジェクト

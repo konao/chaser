@@ -10,8 +10,10 @@ class Stage {
     constructor() {
         this._stage = null; // this._stage[y][x]の順で格納されている
         this._sprs = null;  // this._sprs[y][x]の順で格納されている
-        this._w = 0;
-        this._h = 0;
+        this._w = 0;    // ステージの幅
+        this._h = 0;    // ステージの高さ
+
+        this._wps = []; // ウェイポイントの配列
     }
 
     getSize() {
@@ -182,6 +184,76 @@ class Stage {
                 }
             }
         }
+    }
+
+    // 追跡用ルートマップ作製
+    calcRouteMap() {
+        // ＜アルゴリズム＞
+        //
+        // (1) ウェイポイントを生成
+        // ウェイポイントとは曲がり角のこと
+        //
+        // (2) 2つのウェイポイント間の移動方向を計算
+        // sp=(sx, sy) --> dp=(dx, dy)へ向かう際の変位を計算する
+        // これをマップで保持しておけよよい
+        // map(sp, dp) --> d
+    }
+
+    // マップ上のすべてのウェイポイントを探し出す
+    searchAllWayPoints() {
+        this._wps = [];
+
+        // (x, y)がウェイポイントかどうか判定する
+        //
+        // (x, y)は道の途中でない時、そこはウェイポイント．
+        // 道の途中とは、(x, y)から伸びている道が上下または左右の両方向しかないときである．
+
+        let isWayPoint = ((x, y) => {
+            if (this.get(x, y)===WALL) return false;    // (x, y)が壁ならそもそも論外
+
+            // 上下左右の状態を得る
+            let upStat = this.get(x, y-1);
+            let downStat = this.get(x, y+1);
+            let leftStat = this.get(x-1, y);
+            let rightStat = this.get(x+1, y);
+
+            if ((upStat!==WALL) && (downStat!==WALL) &&
+                (leftStat===WALL) && (rightStat===WALL)) {
+                    // 上下は壁でなく、左右は壁
+                    // ---> (x, y)は道の途中
+                    return false;
+            }
+            else if ((upStat===WALL) && (downStat===WALL) &&
+                (leftStat!==WALL) && (rightStat!==WALL)) {
+                    // 上下は壁、左右は壁でない
+                    // ---> (x, y)は道の途中
+                    return false;
+            }
+            
+            return true;    // (x, y)はウェイポイント
+        }).bind(this);
+
+        for (let y=1; y<this._h-1; y++) {
+            for (let x=1; x<this._w-1; x++) {
+                if (isWayPoint(x, y)) {
+                    this._wps.push({x:x, y:y});
+                }
+            }
+        }
+
+        // debug
+        let nwps = this._wps.length;
+        for (let i=0; i<nwps; i++) {
+            let wp = this._wps[i];
+            console.log(`[${i}], (${wp.x}, ${wp.y})`);
+        }
+    }
+
+    // (cx, cy)に最も近いウェイポイントを返す
+    //
+    // return (nx, ny) ... (cx, cy)に最も近いウェイポイント
+    getNearestWayPoint(cx, cy) {
+
     }
 }
 

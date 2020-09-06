@@ -165,13 +165,13 @@ class Pacman extends Entity {
     updateSprite() {
         if (this._pac.length > 0) {
             let curIdx = this.getSprIdxFromDirAndAnimCount(this._direc, this._animCount);
-            let p = this._pac[curIdx];
+            let pSprite = this._pac[curIdx];
 
             let px = Math.floor(this._x * C.IMGW);
             let py = Math.floor(this._y * C.IMGW);
 
-            p.x = px;
-            p.y = py;
+            pSprite.x = px;
+            pSprite.y = py;
         }
     }
 
@@ -196,7 +196,7 @@ class Pacman extends Entity {
                             y: pos.y
                         };
                         bCanMove = true;
-                    }    
+                    }
                 }
                 else if (adjustY) {
                     if (Math.abs(pos.y - cpos.y) < PosAdjustMargin) {
