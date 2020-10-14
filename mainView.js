@@ -3,6 +3,7 @@ const $ = require('jquery');
 const { Game } = require('./game');
 
 let game = new Game();
+let bPause = false;
 
 //Create a Pixi Application
 let app = new PIXI.Application({ 
@@ -35,7 +36,7 @@ loader.load((loader, resources) => {
 
     // app.ticker.speed = 0.2;  // 効かなかった
     app.ticker.add((delta) => {
-        if (game) {
+        if (game && !bPause) {
             game.update();
         }
     });
@@ -52,7 +53,7 @@ $(window).on('load resize', () => {
 });
 
 $(window).keydown(e => {
-    console.log(`keydown (${e.which})`);
+    // console.log(`keydown (${e.which})`);
     switch (e.which) {
         case 37:    // left
         {
@@ -84,8 +85,10 @@ $(window).keydown(e => {
 
 $('#btStart').click(function() {
     console.log('start clicked');
+    bPause = false;
 });
 
 $('#btPause').click(function() {
     console.log('pause clicked');
+    bPause = true;
 });

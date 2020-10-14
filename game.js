@@ -1,6 +1,8 @@
 const C = require('./const');
 const { Stage, SPACE, WALL, DOT, POWER_FOOD } = require('./stage');
 const { Pacman } = require('./pacman');
+const Utils = require('./utils');
+const { Enemy } = require('./enemy');
 
 // ---------------------------------
 // ゲーム本体制御
@@ -20,6 +22,7 @@ class Game {
         this._pacman = null;
 
         // 敵
+        this._enemies = [];
     }
 
     initGame() {
@@ -37,6 +40,21 @@ class Game {
 
         // debug
         this._stage.searchAllWayPoints();
+
+        // ランダムにn個のウェイポイントを選び出す
+        // ---> そこをモンスターの位置とする
+        this._enemies = [];
+        const nEnemies = 5; // ****** モンスターの数 ******
+        let wps = this._stage.getRandomWayPoints(nEnemies);
+        for (let i=0; i<nEnemies; i++) {
+            let kind = Utils.randInt(4);
+            let enemy = new Enemy(kind);
+            enemy.setPos(wps[i]);
+            console.log(`[${i}] pos=(${wps[i].x}, ${wps[i].y})`);
+            enemy.setDirec(C.NODIR);
+            enemy.setStage(this._stage);
+            this._enemies.push(enemy);
+        }
     }
 
     // @param PIXI [i] PIXIオブジェクト
@@ -48,6 +66,11 @@ class Game {
 
         // pacmanスプライト生成
         this._pacman.genSprite(PIXI, container, resources);
+
+        // 敵スプライト生成
+        for (let i=0; i<this._enemies.length; i++) {
+            this._enemies[i].genSprite(PIXI, container, resources);
+        }
     }
 
     onUpPressed() {
@@ -71,9 +94,19 @@ class Game {
     }
 
     update() {
+        // パックマン移動
         if (this._pacman) {
             this._pacman.move();
             this._pacman.detectCollision(this._stage);
+        }
+
+        // 敵移動
+        if (this._enemies && this._enemies.length > 0) {
+            for (let i=0; i<this._enemies.length; i++) {
+                let enemy = this._enemies[i];
+                enemy.move(this._pacman.getPos());
+                enemy.updateSprite();
+            }
         }
     }
 }

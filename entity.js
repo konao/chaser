@@ -6,6 +6,9 @@ class Entity {
         // セル座標は整数
         this._x = 0.0; 
         this._y = 0.0;
+
+        // ステージオブジェクトへの参照
+        this._stage = null;
     }
 
     getPos() {
@@ -29,7 +32,6 @@ class Entity {
     //     this._x = x;
     //     this._y = y;
     // }
-
     setPos({x, y}) {
         this._x = x;
         this._y = y;
@@ -64,6 +66,14 @@ class Entity {
             x: x+dx,
             y: y+dy
         }
+    }
+
+    setStage(stage) {
+        this._stage = stage;
+    }
+
+    setDirec(direc) {
+        this._direc = direc;
     }
 }
 

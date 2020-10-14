@@ -24,6 +24,7 @@ const MAX_ANIM_COUNT = 6;
 class Pacman extends Entity {
     constructor() {
         super();
+
         // 進行方向
         this._direc = C.NODIR;
 
@@ -35,17 +36,6 @@ class Pacman extends Entity {
 
         // 現在のスプライトインデックス
         this._curIdx = -1;
-
-        // ステージオブジェクトへの参照
-        this._stage = null;
-    }
-
-    setStage(stage) {
-        this._stage = stage;
-    }
-
-    setDirec(direc) {
-        this._direc = direc;
     }
 
     getDirec() {
