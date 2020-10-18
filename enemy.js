@@ -79,6 +79,7 @@ class Enemy extends Entity {
             let sprName = cname + i.toString();
             console.log(sprName);
             let m = new PIXI.Sprite(PIXI.Texture.from(sprName));
+            m.visible = false;
             container.addChild(m);
             this._sprs.push(m);
         }

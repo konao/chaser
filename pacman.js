@@ -86,6 +86,7 @@ class Pacman extends Entity {
 
         // PIXI.Texture.fromに与える文字列(ID)はimage/character.jsonに記述されている
         let pac00 = new PIXI.Sprite(PIXI.Texture.from('pac00'));
+        pac00.visible = true;
         container.addChild(pac00);
         this._pac.push(pac00);
 
@@ -148,8 +149,6 @@ class Pacman extends Entity {
         pac42.visible = false;
         container.addChild(pac42);
         this._pac.push(pac42);
-
-        // this._pac.push(pac00);
     }
 
     updateSprite() {
