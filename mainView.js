@@ -52,7 +52,7 @@ $(window).on('load resize', () => {
     app.renderer.resize(w, h);
 });
 
-$(window).keydown(e => {
+$(window).on('keydown', e => {
     // console.log(`keydown (${e.which})`);
     switch (e.which) {
         case 37:    // left
@@ -83,12 +83,12 @@ $(window).keydown(e => {
     }
 });
 
-$('#btStart').click(function() {
+$('#btStart').on('click', function() {
     console.log('start clicked');
     bPause = false;
 });
 
-$('#btPause').click(function() {
+$('#btPause').on('click', function() {
     console.log('pause clicked');
     bPause = true;
 });
